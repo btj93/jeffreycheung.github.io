@@ -1,5 +1,5 @@
 <p class="about__head">
-    Backend Software Engineer at <a href="https://stransa.co.jp/" target="_blank">stransa</a>. Obsessed to learn and build things. Occasionally, I write blogs about neovim related stuffs and articles I read lately.</p>
+    Backend Software Engineer at <a href="https://stransa.co.jp/" target="_blank">Stransa</a>. Obsessed to learn and build things. Occasionally, I write blogs about neovim related stuffs and articles I read lately.</p>
 
 I'm an experienced developer with over three years in the field, beginning my career as a full-stack engineer. Throughout my journey, I've developed a strong preference for backend development, focusing on creating large-scale enterprise in-house solutions.
 
