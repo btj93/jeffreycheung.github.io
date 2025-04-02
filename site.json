@@ -1,0 +1,23 @@
+{
+  "title": "Jeffrey Cheung",
+  "subtitle": "Backend software engineer at tradeling — obsessed to learn and build things",
+  "owner": {
+    "name": "Jeffrey Cheung",
+    "email": "jeffcyc99@gmail.com"
+  },
+  "social": {
+    "github": "btj93",
+    "linkedin": "jeffrey-c-21b846212"
+  },
+  "seo": {
+    "title": "Jeffrey Cheung",
+    "description": "Blog of a Software Engineer",
+    "author": "Jeffrey Cheung",
+    "keywords": [
+      "blog",
+      "developer blog",
+      "engineering blog"
+    ]
+  },
+  "cname": "jeffreycheung.github.io"
+}
