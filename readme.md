@@ -1,4 +1,4 @@
-# [jeffreycheung.github.io](https://jeffreycheung.github.io)
+# [btj93.github.io/blog](https://btj93.github.io/blog)
 
 My personal blog created using [github-pages-blog-action](https://github.com/btj93/github-pages-blog-action)
 
