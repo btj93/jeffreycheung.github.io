@@ -3,7 +3,8 @@
   "subtitle": "Backend software engineer at Stransa — obsessed to learn and build things",
   "owner": {
     "name": "Jeffrey Cheung",
-    "email": "jeffcyc99@gmail.com"
+    "email": "jeffcyc99@gmail.com",
+    "bio": "Backend Software Engineer at <a href=\"https://stransa.co.jp/\" target=\"_blank\">Stransa</a>. Obsessed to learn and build things. Occasionally, I write blogs about neovim related stuffs and articles I read lately."
   },
   "social": {
     "github": "btj93",
