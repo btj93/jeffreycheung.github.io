@@ -1,7 +1,7 @@
 <p class="about__head">
     Backend Software Engineer at <a href="https://stransa.co.jp/" target="_blank">Stransa</a>. Obsessed to learn and build things. Occasionally, I write blogs about neovim related stuffs and articles I read lately.</p>
 
-<div class="github-card" data-user="btj93"></div>
+<div class="github-card" data-github="btj93" data-width="400" data-height="" data-theme="default"></div>
 
 I'm an experienced developer with over three years in the field, beginning my career as a full-stack engineer. Throughout my journey, I've developed a strong preference for backend development, focusing on creating large-scale enterprise in-house solutions.
 

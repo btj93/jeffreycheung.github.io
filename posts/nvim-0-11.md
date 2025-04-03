@@ -34,12 +34,11 @@ Previously, if you try to `gx` an URL on markdown files, you should find out tha
   ^
 ```
 
-> *Spoiler alert: it doesn't work* 🫠
+> ⚠️ *Spoiler alert: it doesn't work* 🫠
 
 With this fixed, you can now `gx` on anywhere in the link text!
 
-Checkout the PR for more details:\
-<https://github.com/neovim/neovim/pull/28630>
+Check out the [PR](https://github.com/neovim/neovim/pull/28630) for more details.
 
 ### Bonus tips
 
@@ -48,7 +47,7 @@ Check this plugin out for enhanced `gx` functionality, including:
 - `gx` with your cursor on top of a plugin name to open the plugin github page in the browser
 - the word/selection is automatically searched on the web, if there is no url found under the cursor
 
-<div class="github-card" data-user="chrishrb" data-repo="gx.nvim"></div>
+<div class="github-card" data-github="chrishrb/gx.nvim" data-width="400" data-height="" data-theme="default"></div>
 
 ## Builtin auto-completion
 
@@ -80,9 +79,9 @@ With blink.cmp 1.0 recently released, quite a few people have already switched f
 
 The new built-in auto-completion is still missing some customization options and supports for snippets, so if you are currently using nvim-cmp or blink.cmp with heavy configurations, maybe you should wait it out.
 
-I'm personally using blink.cmp, maybe one day the builtin auto completion will be able to replace blink.cmp.
+I'm personally using blink.cmp with some heavy customization, so I have kept using blink.cmp on neovim 0.11, secretly hoping that maybe one day the builtin auto completion will be able to replace blink.cmp.
 
-I know how time-consuming it is to tinker with the config *(I have spent hours and hours on it...)*. So if your life is happy with whatever completion plugin you are current using, feel free to not worry about it.
+I know how time-consuming it is to tinker with the config *(I have spent countless hours and hours on it...)*. So if your life is happy with whatever completion plugin you are current using, feel free to not worry about it.
 
 ![If it works, it works](https://btj93.github.io/nvim-0-11/if_it_works_it_works.png)
 > [Source](https://www.reddit.com/r/ProgrammerHumor/comments/w6ysl9/if_it_works_it_works/)
@@ -100,8 +99,6 @@ If you are looking at a more fancy diagnostic, you can try out the new diagnosti
 This is inspired by a plugin made by whynothugo called [lsp_lines.nvim](https://sr.ht/~whynothugo/lsp_lines.nvim/). Which in turns *might* be inspired by the helix editor.
 
 It offers more features such as pin-pointing the position of error, and showing multiple errors on the same line.
-
-<https://www.reddit.com/r/neovim/comments/1jo9oe9/i_set_up_my_config_to_use_virtual_lines_for/>
 
 ### Double diagnostic text
 
