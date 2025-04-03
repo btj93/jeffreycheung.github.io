@@ -72,8 +72,9 @@ I'm excited to see more new vimmers onboarding with all these new features that 
 
 ### I'm already using nvim-cmp or blink.cmp, should I switch?
 
-<div class="github-card" data-user="hrsh7th" data-repo="nvim-cmp"></div>
-<div class="github-card" data-user="Saghen" data-repo="blink.cmp"></div>
+<div class="github-card" data-github="hrsh7th/nvim-cmp" data-width="400" data-height="" data-theme="default"></div>
+
+<div class="github-card" data-github="Saghen/blink.cmp" data-width="400" data-height="" data-theme="default"></div>
 
 With blink.cmp 1.0 recently released, quite a few people have already switched from nvim-cmp to it.
 
