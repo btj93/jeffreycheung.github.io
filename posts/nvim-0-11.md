@@ -199,7 +199,7 @@ vim.api.nvim_create_autocmd({ 'CursorMoved', 'DiagnosticChanged' }, {
 
 > [Source](https://www.reddit.com/r/neovim/comments/1jpbc7s/disable_virtual_text_if_there_is_diagnostic_in/)
 
-## Default keymaps
+## New Default keymaps
 
 Mappings inspired by Tim Pope's vim-unimpaired:
 
