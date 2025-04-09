@@ -16,7 +16,7 @@ For example, in normal mode, you can use the `h` key to move the cursor left, wh
 
 ## QoL Keymaps Collections
 
-### `*zz*
+### `*zz`
 
 `gg` and `G` are two keymaps that are used to move the cursor to the top or bottom of the file, respectively.
 
@@ -30,7 +30,7 @@ This is much better from an ergonomics perspective.
 vim.keymap.set({ "n" }, "G", "Gzz", { noremap = true, desc = "Go to bottom" })
 ```
 
-Besides `G`, there are also `n`, `N`, `*`, `#`, `g*`, and `g#` keymaps, that share the same problem. They move the line to just visible, which means the cursor is most likely at the bottom of the screen.
+Besides `G`, there are also `n`, `N`, `*`, `#`, `g*`, and `g#` keymaps that share the same problem. They move the line to just barely visible, which means the cursor is most likely at the bottom of the screen.
 
 ``` lua
 vim.keymap.set("n", "n", "nzz", { noremap = true })
@@ -47,6 +47,31 @@ This is a common task when editing code. You want to make some changes to a line
 
 ``` lua
 vim.keymap.set("n", "yc", "yy<cmd>normal gcc<CR>p", { noremap = true, desc = "Duplicate a line and comment" })
+```
+
+In visual mode, you may use the following snippet:
+
+``` lua
+local function duplicate_and_comment()
+  -- Escape the visual mode
+  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+  vim.api.nvim_feedkeys(esc, "x", false)
+
+  -- Get the selected text
+  local start_line, end_line = vim.fn.line("'<"), vim.fn.line("'>")
+
+  -- Duplicate the selected lines
+  vim.cmd(start_line .. "," .. end_line .. "yank")
+  vim.cmd(end_line + 1 .. "put")
+
+  -- reselect previous visual selection
+  vim.api.nvim_feedkeys("gv", "n", false)
+
+  -- comment the visual selection
+  vim.api.nvim_feedkeys("gc", "v", false)
+end
+
+vim.keymap.set("v", "yc", duplicate_and_comment, { noremap = true, desc = "Duplicate selection and comment" })
 ```
 
 ### Select to the end of line
@@ -74,6 +99,32 @@ But they are quite far from the home row, so I have these keymaps to move the cu
 vim.keymap.set({ "n", "v" }, "gh", "_", { noremap = true })
 vim.keymap.set({ "n", "v" }, "gl", "$", { noremap = true })
 ```
+
+### Quit insert mode
+
+It is quite common to remap another key to `<esc>` in insert mode, such that your fingers don't have to move far away from the home row to quit insert mode.
+
+Common candidates includes:
+
+- `<C-c>`
+- `jj`
+- `jk`
+- `kj`
+- `kk`
+
+I personally chose `jk` because you can press it with two fingers, making it faster than `jj`.
+
+``` lua
+-- remap jk
+vim.keymap.set({ "i" }, "jk", "<Esc>", { noremap = true, desc = "jk to escape" })
+vim.keymap.set({ "i" }, "JK", "<Esc>", { noremap = true, desc = "JK to escape" })
+```
+
+> **The only drawback is that now I am constantly inserting excessive `jk` at the end of the sentence all over the place outside of NeoVim.jk**
+
+Alternatively, you may remap the following keys to `<esc>` on the system level or keyboard firmware level.
+
+- `Capslock`
 
 ## Keymaps expanding based on current feature
 
@@ -146,3 +197,22 @@ vim.keymap.set("i", "<M-b>", "<C-o>b", { noremap = true })
 -- / or * to search, then g/ to put them into the quickfix list
 vim.keymap.set("n", "g/", ":vimgrep /<C-R>//j %<CR>|:cw<CR>", { noremap = true, silent = true })
 ```
+
+### Yank / delete / change up to the next quote
+
+It has always annoyed me that we have `yw` to yank to the next word, `y]%` to yank to the next bracket, but we have to do `yt"` to yank to the next **double** quote. Especially that we have the `q` text objects from `mini.ai`.
+
+So, `yiw` works, `yiq` works, `yw` works, but there is no `yq` to yank to the next quote.
+
+So I embarked on a journey to create a keymap that will yank / delete / change up to the next quote.
+
+Not a lot of searching and typing later, I came up with this:
+
+``` lua
+-- Operations up to next quote
+vim.keymap.set({ "n" }, "dq", "v/[\"'`]<CR><Left>d<cmd>nohlsearch<CR>", { noremap = true })
+vim.keymap.set({ "n" }, "yq", "v/[\"'`]<CR><Left>y<cmd>nohlsearch<CR>", { noremap = true })
+vim.keymap.set({ "n" }, "cq", "v/[\"'`]<CR><Left>di<cmd>nohlsearch<CR>", { noremap = true })
+```
+
+Sure it isn't the most prettiest piece of code in the world, but it gets the job done.
