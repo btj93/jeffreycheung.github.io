@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=3.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Neovim 0.11 Released! 🎉 Why upgrade from an older version?</title>
+    <meta name="description" content="Blog of a Software Engineer"/>
+    <meta name="keywords" content="blog,developer blog,engineering blog"/>
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Alegreya:400,400i|Lato:400,400i,700,900|Roboto+Mono:400,300">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/shades-of-purple.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+
+    <link rel="stylesheet" href="/css/normalize.css"/>
+    <link rel="stylesheet" href="/css/theme.css"/>
+</head>
+<body>
+<nav class="nav">
+    <div class="nav__left">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+    </div>
+    <div class="nav__right">
+
+        <a target="_blank" href="https://github.com/btj93" class="link-github">GitHub</a>
+
+
+
+        <a target="_blank" href="https://www.linkedin.com/in/jeffrey-c-21b846212" class="link-linkedin">LinkedIn</a>
+
+
+        <a href="mailto:jeffcyc99@gmail.com" class="link-email">Email</a>
+
+    </div>
+</nav>
+
+<article class="mar-b-7">
+    <header class="text-center">
+        <time class="mar-b-6" datetime="Sun, March 30, 2025">Sun, March 30, 2025</time>
+        <h1 class="mar-b-7">Neovim 0.11 Released! 🎉 Why upgrade from an older version?</h1>
+    </header>
+    <h1 id="whatsnewinneovim011">What's New in Neovim 0.11</h1>
+<p>Neovim 0.11 is packed with exciting new features, performance boosts, and bug fixes.<br />
+For the full changelog, check out:<br />
+<a href="https://neovim.io/doc/user/news-0.11.html">https://neovim.io/doc/user/news-0.11.html</a></p>
+<p>Or admire the community's hard work in the milestone:<br />
+<a href="https://github.com/neovim/neovim/milestone/41">https://github.com/neovim/neovim/milestone/41</a></p>
+<hr />
+<h2 id="highlights">Highlights</h2>
+<h3 id="treesitterfastersmootherasync">Treesitter: Faster, Smoother, Async</h3>
+<p>Neovim 0.11 brings major Treesitter improvements, dramatically enhancing the experience when working with large files:</p>
+<ul>
+<li><a href="https://github.com/neovim/neovim/pull/31631"><strong>Async parsing</strong></a>: Parsing now happens asynchronously, so your UI won't freeze on big files.</li>
+<li><a href="https://github.com/neovim/neovim/pull/32000"><strong>Non-blocking injection queries</strong></a>: Language injections (like embedded code blocks) are now parsed without blocking.</li>
+<li><a href="https://github.com/neovim/neovim/pull/31827"><strong>Async folding</strong></a>: Code folding is now async too, making it smooth even on huge files.</li>
+</ul>
+<hr />
+<h3 id="gxnowworksonmarkdownlinktext"><code>gx</code> Now Works on Markdown Link Text</h3>
+<p>The default <a href="https://neovim.io/doc/user/various.html#gx"><code>gx</code></a> keymap opens the URL or file path under your cursor.</p>
+<p><strong>Before:</strong> In markdown, <code>gx</code> only worked if your cursor was on the URL part, not the link text:</p>
+<pre><code>[...](https://...)
+  ^
+</code></pre>
+<blockquote>
+  <p>⚠️ <em>Spoiler: it didn't work on the link text</em> 🫠</p>
+</blockquote>
+<p><strong>Now:</strong> You can <code>gx</code> anywhere inside the link text, and it will open the URL!<br />
+See <a href="https://github.com/neovim/neovim/pull/28630">PR #28630</a> for details.</p>
+<p><strong>Bonus:</strong><br />
+Try this plugin for supercharged <code>gx</code>:</p>
+<ul>
+<li>Open plugin GitHub pages by <code>gx</code> on the plugin name</li>
+<li>Search the web if no URL is found under the cursor</li>
+</ul>
+<div class="gh-card gh-large" data-repo="chrishrb/gx.nvim"></div>
+<hr />
+<h3 id="builtinautocompletion">Built-in Auto-Completion</h3>
+<p>Neovim 0.11 introduces <strong>native LSP completion</strong> — no plugin required!</p>
+<p>Try this snippet to enable it:</p>
+<pre><code class="lua language-lua">vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(event)
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if client:supports_method('textDocument/completion') then
+      vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
+    end
+  end,
+})
+</code></pre>
+<p>With <a href="https://github.com/neovim/neovim/issues/20451">Neovim approaching 1.0</a>, this is a big step forward.</p>
+<p>I'm excited to see more new vimmers onboard with these features that make Neovim more powerful and enjoyable!</p>
+<h4 id="shouldyouditchnvimcmporblinkcmp">Should you ditch <code>nvim-cmp</code> or <code>blink.cmp</code>?</h4>
+<div class="github-card" data-github="hrsh7th/nvim-cmp" data-width="400"></div>
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+<div class="gh-card gh-large" data-repo="Saghen/blink.cmp"></div>
+<div class="github-card" data-github="" data-width="400"></div>
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+<p>With blink.cmp 1.0 just released, many have switched from nvim-cmp.</p>
+<p>However, the built-in completion <strong>still lacks</strong>:</p>
+<ul>
+<li>Snippet support</li>
+<li>Deep customization options</li>
+</ul>
+<p>If you rely heavily on those, <strong>stick with your plugin for now</strong>.</p>
+<p>Personally, I use blink.cmp with lots of tweaks, so I’m sticking with it on 0.11 — hoping someday the built-in completion will be good enough to replace it.</p>
+<p>If your current setup works well, <strong>no need to rush</strong>.<br />
+Remember:</p>
+<p><img src="https://btj93.github.io/nvim-0-11/if_it_works_it_works.png" alt="If it works, it works" />  </p>
+<blockquote>
+  <p><a href="https://www.reddit.com/r/ProgrammerHumor/comments/w6ysl9/if_it_works_it_works/">Source</a></p>
+</blockquote>
+<hr />
+<h3 id="diagnosticvirtuallines">Diagnostic Virtual Lines</h3>
+<p>By default, <strong>virtual text diagnostics are now disabled</strong>.<br />
+To enable them:</p>
+<pre><code class="lua language-lua">vim.diagnostic.config({ virtual_text = true })
+</code></pre>
+<p>But wait! There's more:</p>
+<p>Neovim 0.11 introduces <strong>diagnostic virtual lines</strong>, inspired by <a href="https://sr.ht/~whynothugo/lsp_lines.nvim/">lsp_lines.nvim</a> (and maybe Helix editor).<br />
+They:</p>
+<ul>
+<li>Pinpoint error positions more clearly</li>
+<li>Show multiple errors on the same line</li>
+<li>Are less cluttered than inline virtual text</li>
+</ul>
+<h4 id="avoiddoublediagnostics">Avoid double diagnostics</h4>
+<p>If you see <strong>duplicate</strong> diagnostics, disable <code>nvim-lspconfig</code>'s virtual text:</p>
+<pre><code class="lua language-lua">return {
+  "neovim/nvim-lspconfig",
+  opts = {
+    diagnostics = {
+      virtual_text = false,
+    },
+  },
+}
+</code></pre>
+<h4 id="showerrorsasvirtuallineswarningsasvirtualtext">Show errors as virtual lines, warnings as virtual text</h4>
+<pre><code class="lua language-lua">vim.diagnostic.config({
+  virtual_text = {
+    severity = { max = vim.diagnostic.severity.WARN },
+  },
+  virtual_lines = {
+    severity = { min = vim.diagnostic.severity.ERROR },
+  },
+})
+</code></pre>
+<blockquote>
+  <p><a href="https://www.reddit.com/r/neovim/comments/1jo9oe9/i_set_up_my_config_to_use_virtual_lines_for">Source</a></p>
+</blockquote>
+<h4 id="togglevirtuallinesandvirtualtextwithakeymap">Toggle virtual lines and virtual text with a keymap</h4>
+<pre><code class="lua language-lua">vim.keymap.set('n', '&lt;leader&gt;tdd', function()
+  vim.diagnostic.config {
+    virtual_lines = not vim.diagnostic.config().virtual_lines,
+    virtual_text = not vim.diagnostic.config().virtual_text,
+  }
+end, { desc = 'Toggle diagnostic virtual lines and virtual text' })
+</code></pre>
+<blockquote>
+  <p><a href="https://www.reddit.com/r/neovim/comments/1jo9oe9/comment/mkti11p/">Source</a></p>
+</blockquote>
+<h4 id="showvirtuallinesonlyonthecursorline">Show virtual lines <strong>only</strong> on the cursor line</h4>
+<p>Show inline text normally, but virtual lines <strong>only</strong> on the current line:</p>
+<pre><code class="lua language-lua">vim.diagnostic.config({
+  virtual_text = true,
+  virtual_lines = { current_line = true },
+  underline = true,
+  update_in_insert = false,
+})
+</code></pre>
+<p>Pair it with this autocmd to toggle dynamically:</p>
+<pre><code class="lua language-lua">local og_virt_text
+local og_virt_line
+
+vim.api.nvim_create_autocmd({ 'CursorMoved', 'DiagnosticChanged' }, {
+  group = vim.api.nvim_create_augroup('diagnostic_only_virtlines', {}),
+  callback = function()
+    if og_virt_line == nil then
+      og_virt_line = vim.diagnostic.config().virtual_lines
+    end
+
+    -- Ignore if virtual_lines.current_line is disabled
+    if not (og_virt_line and og_virt_line.current_line) then
+      if og_virt_text then
+        vim.diagnostic.config({ virtual_text = og_virt_text })
+        og_virt_text = nil
+      end
+      return
+    end
+
+    if og_virt_text == nil then
+      og_virt_text = vim.diagnostic.config().virtual_text
+    end
+
+    local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+
+    if vim.tbl_isempty(vim.diagnostic.get(0, { lnum = lnum })) then
+      vim.diagnostic.config({ virtual_text = og_virt_text })
+    else
+      vim.diagnostic.config({ virtual_text = false })
+    end
+  end,
+})
+</code></pre>
+<blockquote>
+  <p><a href="https://www.reddit.com/r/neovim/comments/1jpbc7s/disable_virtual_text_if_there_is_diagnostic_in/">Source</a></p>
+</blockquote>
+<hr />
+<h3 id="newdefaultkeymaps">New Default Keymaps</h3>
+<p>Inspired by Tim Pope’s vim-unimpaired, Neovim 0.11 adds many handy mappings:</p>
+<ul>
+<li><code>[q</code>, <code>]q</code>, <code>[Q</code>, <code>]Q</code>, <code>[Ctrl-Q</code>, <code>]Ctrl-Q</code>: quickfix list navigation</li>
+<li><code>[l</code>, <code>]l</code>, <code>[L</code>, <code>]L</code>, <code>[Ctrl-L</code>, <code>]Ctrl-L</code>: location list navigation</li>
+<li><code>[t</code>, <code>]t</code>, <code>[T</code>, <code>]T</code>, <code>[Ctrl-T</code>, <code>]Ctrl-T</code>: tag match list navigation</li>
+<li><code>[a</code>, <code>]a</code>, <code>[A</code>, <code>]A</code>: argument list navigation</li>
+<li><code>[b</code>, <code>]b</code>, <code>[B</code>, <code>]B</code>: buffer list navigation</li>
+<li><code>[&lt;Space&gt;</code>, <code>]&lt;Space&gt;</code>: add empty line above/below</li>
+<li><code>[[</code> and <code>]]</code>: jump between shell prompts (OSC 133 semantic prompts)</li>
+</ul>
+<hr />
+<h1 id="shouldyouupgrade">Should You Upgrade?</h1>
+<p><strong>Absolutely!</strong><br />
+Even just for the Treesitter improvements, Neovim 0.11 is a fantastic upgrade.<br />
+Enjoy a faster, smoother, and more powerful Neovim!</p>
+</article>
+
+<article>
+  <!-- Author section starts here -->
+  <div class="author-section">
+    <div class="author-name"> Jeffrey Cheung </div>
+    <p class="author-bio">
+      Backend Software Engineer at <a href="https://stransa.co.jp/" target="_blank">Stransa</a>. Obsessed to learn and build things. Occasionally, I write blogs about neovim related stuffs and articles I read lately.
+    </p>
+    <div class="author-links">
+      
+        <a href="https://github.com/btj93" target="_blank" rel="noopener noreferrer">GitHub</a>
+      
+      
+      
+        <a href="https://www.linkedin.com/in/jeffrey-c-21b846212" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      
+      
+        <a href="mailto:jeffcyc99@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>
+      
+    </div>
+  </div>
+  <!-- Author section ends here -->
+</article>
+
+
+
+<footer class="text-center mar-tb-6">
+    © 2025 Jeffrey Cheung, unless otherwise stated.
+</footer>
+
+<script>hljs.highlightAll();</script>
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
+</body>
+</html>
+
