@@ -6,33 +6,38 @@ permalink: /nvim-keymap-essentials
 
 # Neovim Custom Keymap Essentials
 
-## Keymaps in Neovim
+Unlock the full power of Neovim by customizing your keymaps! This guide covers practical, ergonomic remappings and Lua snippets to boost your editing efficiency, reduce finger travel, and streamline your workflow.
 
-In Neovim, keymaps are used to map keys to actions. They are a major feature in the vim world. They fit in very well with the philosophy of vim, which is to make the most common actions as simple as possible.
+---
 
-In vim, there are different modal modes, such as normal mode, insert mode, and visual mode. Each mode has its own set of keymaps.
+## Understanding Keymaps in Neovim
 
-For example, in normal mode, you can use the `h` key to move the cursor left, while in visual mode, you can use `h` to select a character to the left.
+Neovim (and Vim) is built around **modal editing**, where different modes (normal, insert, visual, etc.) have distinct key behaviors. Keymaps let you customize or extend these behaviors, making common actions faster and more intuitive.
 
-## QoL Keymaps Collections
+For example:
 
-### `*zz`
+- In **normal mode**, pressing `h` moves the cursor left.
+- In **visual mode**, `h` extends the selection left.
 
-`gg` and `G` are two keymaps that are used to move the cursor to the top or bottom of the file, respectively.
+Custom keymaps can optimize these interactions to fit your habits and needs.
 
-The problem with `G` are that the cursor will be placed at the top or bottom row of the file. Since your eyes have to travel a lot to find the cursor, it can be very disturbing.
+---
 
-The `zz` keymap moves the cursor to the center of the screen, which in-turn moves the code at the end of the file to the center of the screen.
+## Quality-of-Life Keymaps
 
-This is much better from an ergonomics perspective.
+### Keep the Cursor Centered with `zz`
 
-``` lua
-vim.keymap.set({ "n" }, "G", "Gzz", { noremap = true, desc = "Go to bottom" })
+Commands like `gg` (go to top) and `G` (go to bottom) place the cursor at the screen edge, forcing your eyes to hunt for it.
+
+Instead, remap them to recenter the cursor with `zz`:
+
+```lua
+vim.keymap.set("n", "G", "Gzz", { noremap = true, desc = "Go to bottom and center" })
 ```
 
-Besides `G`, there are also `n`, `N`, `*`, `#`, `g*`, and `g#` keymaps that share the same problem. They move the line to just barely visible, which means the cursor is most likely at the bottom of the screen.
+Similarly, remap search motions so the match is always centered:
 
-``` lua
+```lua
 vim.keymap.set("n", "n", "nzz", { noremap = true })
 vim.keymap.set("n", "N", "Nzz", { noremap = true })
 vim.keymap.set("n", "*", "*zz", { noremap = true })
@@ -41,68 +46,74 @@ vim.keymap.set("n", "g*", "g*zz", { noremap = true })
 vim.keymap.set("n", "g#", "g#zz", { noremap = true })
 ```
 
-### Duplicate a line and comment out the first line
+---
 
-This is a common task when editing code. You want to make some changes to a line, but you want to keep the original line around for reference.
+### Duplicate a Line and Comment the Original
 
-``` lua
-vim.keymap.set("n", "yc", "yy<cmd>normal gcc<CR>p", { noremap = true, desc = "Duplicate a line and comment" })
+When experimenting, it's handy to duplicate a line and comment out the original:
+
+```lua
+vim.keymap.set("n", "yc", "yy<cmd>normal gcc<CR>p", { noremap = true, desc = "Duplicate line and comment original" })
 ```
 
-In visual mode, you may use the following snippet:
+For **visual mode**, duplicate and comment a selection:
 
-``` lua
+```lua
 local function duplicate_and_comment()
-  -- Escape the visual mode
-  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+  -- Exit visual mode
+  local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
   vim.api.nvim_feedkeys(esc, "x", false)
 
-  -- Get the selected text
-  local start_line, end_line = vim.fn.line("'<"), vim.fn.line("'>")
+  -- Get selection range
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
 
-  -- Duplicate the selected lines
+  -- Yank and paste below
   vim.cmd(start_line .. "," .. end_line .. "yank")
-  vim.cmd(end_line + 1 .. "put")
+  vim.cmd((end_line + 1) .. "put")
 
-  -- reselect previous visual selection
+  -- Reselect pasted block
   vim.api.nvim_feedkeys("gv", "n", false)
 
-  -- comment the visual selection
+  -- Comment the original selection
   vim.api.nvim_feedkeys("gc", "v", false)
 end
 
-vim.keymap.set("v", "yc", duplicate_and_comment, { noremap = true, desc = "Duplicate selection and comment" })
+vim.keymap.set("v", "yc", duplicate_and_comment, { noremap = true, desc = "Duplicate selection and comment original" })
 ```
 
-### Select to the end of line
+---
 
-To yank to the end of the line, we have `Y`.
+### Select to the End of Line
 
-To delete to the end of the line, we have `D`.
+We have:
 
-To cut to the end of the line, we have `C`.
+- `Y` to yank to end of line
+- `D` to delete to end of line
+- `C` to change to end of line
 
-Why shouldn't we have something to select to the end of the line?
+Why not a **select to end of line**?
 
-``` lua
-vim.keymap.set({ "n" }, "<leader>v", "vg_", { noremap = true, desc = "Select to last non-blank character" })
+```lua
+vim.keymap.set("n", "<leader>v", "vg_", { noremap = true, desc = "Select to last non-blank character" })
 ```
 
-### Move cursor to the start / end of the line
+---
 
-`_` moves the cursor to the start of the line, and `$` moves the cursor to the end of the line.
+### Move to Start/End of Line with Home Row Keys
 
-But they are quite far from the home row, so I have these keymaps to move the cursor to the start / end of the line.
+`_` and `$` move to start/end of line, but they're awkward to reach. Try:
 
-``` lua
--- Move to start/end of line
-vim.keymap.set({ "n", "v" }, "gh", "_", { noremap = true })
-vim.keymap.set({ "n", "v" }, "gl", "$", { noremap = true })
+```lua
+vim.keymap.set({ "n", "v" }, "gh", "_", { noremap = true, desc = "Go to start of line" })
+vim.keymap.set({ "n", "v" }, "gl", "$", { noremap = true, desc = "Go to end of line" })
 ```
 
-### Quit insert mode
+---
 
-It is quite common to remap another key to `<esc>` in insert mode, such that your fingers don't have to move far away from the home row to quit insert mode.
+### Easier Escape from Insert Mode
+
+Pressing `<Esc>` is disruptive. Instead, remap quick sequences:
 
 Common candidates includes:
 
@@ -112,33 +123,36 @@ Common candidates includes:
 - `kj`
 - `kk`
 
-I personally chose `jk` because you can press it with two fingers, making it faster than `jj`.
-
-``` lua
--- remap jk
-vim.keymap.set({ "i" }, "jk", "<Esc>", { noremap = true, desc = "jk to escape" })
-vim.keymap.set({ "i" }, "JK", "<Esc>", { noremap = true, desc = "JK to escape" })
+```lua
+vim.keymap.set("i", "jk", "<Esc>", { noremap = true, desc = "Exit insert mode with jk" })
+vim.keymap.set("i", "JK", "<Esc>", { noremap = true, desc = "Exit insert mode with JK" })
 ```
 
-> **The only drawback is that now I am constantly inserting excessive `jk` at the end of the sentence all over the place outside of NeoVim.jk**
+> **The only drawback is that now I am constantly inserting excessive `jk` at the end of sentences all over the place outside of NeoVim.jk**
 
-Alternatively, you may remap the following keys to `<esc>` on the system level or keyboard firmware level.
+Alternatively, remap `CapsLock` to `Esc` at the OS or firmware level.
 
-- `Capslock`
+#### Bonus Tip
 
-## Keymaps expanding based on current feature
+If you did remap `jk` to `Esc`, you will find that there is a small delay between pressing `j` and the character showing up.
 
-### Diff side-by-side
+This is because NeoVim is waiting for the next keypress to know whether you are try to use the `jk` sequence or not.
 
-I have been using the builtin diff feature for quite a while now, and it has been very helpful especially when comparing JSON files.
+After [a brief configurable delay](https://neovim.io/doc/user/options.html#'timeoutlen'), NeoVim inserts the character anyway.
 
-The `:windo diffthis` command will diff the current file with the file in the other window.
+To fix this, you can install the following plugin, designed specifically for this purpose:
 
-The `:diffoff!` command will turn off the diff feature.
+<div class="github-card" data-github="max397574/better-escape.nvim" data-width="400" data-height="" data-theme="default"></div>
 
-So I wrote this little lua function to toggle the diff side-by-side.
+---
 
-``` lua
+## Feature-Specific Keymaps
+
+### Toggle Diff Mode Side-by-Side
+
+Built-in diff mode is great for comparing files. Toggle it easily:
+
+```lua
 local function toggle_diff()
   if vim.wo.diff then
     vim.cmd("diffoff!")
@@ -146,73 +160,71 @@ local function toggle_diff()
     vim.cmd("windo diffthis")
   end
 end
-vim.keymap.set({ "n" }, "<leader>dd", toggle_diff, { noremap = true, desc = "Diff side by side" })
+
+vim.keymap.set("n", "<leader>dd", toggle_diff, { noremap = true, desc = "Toggle diff mode" })
 ```
 
-### Search and replace the word under the cursor
+---
 
-From the Vim wiki: <https://bit.ly/4eLAARp>
+### Search and Replace Word Under Cursor
 
-``` lua
-vim.keymap.set(
-  "n",
-  "<Leader>r",
-  [[:%s/\<<C-r><C-w>\>//g<Left><Left>]],
-  { desc = "Search and replace word under cursor" }
-)
+Quickly replace all instances of the word under the cursor:
+
+```lua
+vim.keymap.set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], { desc = "Search and replace word under cursor" })
 ```
 
-### Movements in insert mode
+> Source: [Vim Tips Wiki](https://bit.ly/4eLAARp)
 
-Now I know what you are thinking, you should not be moving the cursor in insert mode. There are different modes for a reason.
+---
 
-But there are just some scenarios where you need to move the cursor just a little bit in insert mode.
+### Move the Cursor in Insert Mode
 
-Sure, you can use the `<Ctrl-o>` key to just allow the following key to be normal mode, but it is *suboptimal* with the number of keys you need to press.
+Sometimes you just want to nudge the cursor without leaving insert mode:
 
-So here are some keymaps that I use to move the cursor in insert mode.
-
-``` lua
--- One character at a time
+```lua
+-- Move by character
 vim.keymap.set("i", "<C-n>", "<Down>", { noremap = true })
 vim.keymap.set("i", "<C-p>", "<Up>", { noremap = true })
 vim.keymap.set("i", "<C-b>", "<Left>", { noremap = true })
 vim.keymap.set("i", "<C-f>", "<Right>", { noremap = true })
 vim.keymap.set("i", "<C-e>", "<C-o>$", { noremap = true })
-```
 
-These keymaps are actually quite common keymaps in other places. Most MacOS apps, even the terminal I use, [Kitty](https://github.com/kovidgoyal/kitty), comes with these keymaps out of the box.
-
-I also have these keymaps to move the cursor one word at a time.
-
-``` lua
--- Move one word at a time
+-- Move by word
 vim.keymap.set("i", "<M-f>", "<C-o>w", { noremap = true })
 vim.keymap.set("i", "<M-b>", "<C-o>b", { noremap = true })
 ```
 
-### Put searched matches in the Quickfix list
+These mimic common shortcuts in terminals and macOS apps.
 
-``` lua
--- / or * to search, then g/ to put them into the quickfix list
-vim.keymap.set("n", "g/", ":vimgrep /<C-R>//j %<CR>|:cw<CR>", { noremap = true, silent = true })
+---
+
+### Send Search Results to the Quickfix List
+
+After searching (`/` or `*`), list all matches in the quickfix window:
+
+```lua
+vim.keymap.set("n", "g/", ":vimgrep /<C-R>//j %<CR>|:cw<CR>", { noremap = true, silent = true, desc = "Populate quickfix with search results" })
 ```
 
-### Yank / delete / change up to the next quote
+---
 
-It has always annoyed me that we have `yw` to yank to the next word, `y]%` to yank to the next bracket, but we have to do `yt"` to yank to the next **double** quote. Especially that we have the `q` text objects from `mini.ai`.
+### Yank, Delete, or Change Up to the Next Quote
 
-So, `yiw` works, `yiq` works, `yw` works, but there is no `yq` to yank to the next quote.
+NeoVim lacks a simple `yq` (yank to next quote). Here's a workaround:
 
-So I embarked on a journey to create a keymap that will yank / delete / change up to the next quote.
-
-Not a lot of searching and typing later, I came up with this:
-
-``` lua
--- Operations up to next quote
-vim.keymap.set({ "n" }, "dq", "v/[\"'`]<CR><Left>d<cmd>nohlsearch<CR>", { noremap = true })
-vim.keymap.set({ "n" }, "yq", "v/[\"'`]<CR><Left>y<cmd>nohlsearch<CR>", { noremap = true })
-vim.keymap.set({ "n" }, "cq", "v/[\"'`]<CR><Left>di<cmd>nohlsearch<CR>", { noremap = true })
+```lua
+vim.keymap.set("n", "dq", "v/[\"'`]<CR><Left>d<cmd>nohlsearch<CR>", { noremap = true, desc = "Delete up to next quote" })
+vim.keymap.set("n", "yq", "v/[\"'`]<CR><Left>y<cmd>nohlsearch<CR>", { noremap = true, desc = "Yank up to next quote" })
+vim.keymap.set("n", "cq", "v/[\"'`]<CR><Left>di<cmd>nohlsearch<CR>", { noremap = true, desc = "Change up to next quote" })
 ```
 
-Sure it isn't the most prettiest piece of code in the world, but it gets the job done.
+It's by no means the most elegant solution, but it works!
+
+---
+
+## Final Thoughts
+
+Custom keymaps can dramatically improve your Neovim experience. Start small, remap what annoys you, and gradually build a setup that feels natural and efficient.
+
+Happy hacking! 🚀
